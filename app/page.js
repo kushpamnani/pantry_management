@@ -21,6 +21,7 @@ export default function Home() {
       });
     });
     setInventory(inventoryList);
+    console.log(inventoryList)
   };
 
   useEffect(() => {
@@ -31,11 +32,12 @@ export default function Home() {
     <Box>
       <Typography variant="h1">Inventory Management </Typography>
       {inventory.forEach((item) => {
+        console.log(item)
         return (
-          <>
+          <Box> 
             {item.name}
             {item.count}
-          </>
+          </Box>
         );
       })}
     </Box>
