@@ -61,7 +61,8 @@ export default function Home() {
   const handleClose = () => setOpen(false); // Corrected setClose to setOpen
 
   return (
-    <Box width="100vw" height="100vh" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+    <Box width="100vw" height="100vh" display="flex" flexDirection="column" alignItems="center" justifyContent="center" gap = {2}>
+      <Modal></Modal>
       <Typography variant="h1">Inventory Management</Typography>
       {/* Add more components and logic as needed */}
     </Box>
