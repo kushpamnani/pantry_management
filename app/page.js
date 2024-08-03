@@ -2,7 +2,14 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { firestore } from "@/firebase";
-import { Box, Modal, Stack, TextField, Typography, Button} from "@mui/material";
+import {
+  Box,
+  Modal,
+  Stack,
+  TextField,
+  Typography,
+  Button,
+} from "@mui/material";
 import {
   query,
   getDocs,
@@ -52,7 +59,7 @@ export default function Home() {
     if (docSnap.exists()) {
       const { quantity } = docSnap.data();
       if (quantity === 1) {
-        await deleteDoc(docRef); // Corrected delete to deleteDoc
+        await deleteDoc(docRef);
       } else {
         await setDoc(docRef, { quantity: quantity - 1 });
       }
@@ -66,7 +73,7 @@ export default function Home() {
   }, []);
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false); // Corrected setClose to setOpen
+  const handleClose = () => setOpen(false);
 
   return (
     <Box
@@ -92,31 +99,75 @@ export default function Home() {
           flexDirection="column"
           gap={3}
           sx={{
-            transform: "translate(-50%,-50%)"
-
+            transform: "translate(-50%,-50%)",
           }}
         >
           <Typography variant="h6">Add Item</Typography>
-          <Stack width = "100%" direction="row" spacing={2}>
+          <Stack width="100%" direction="row" spacing={2}>
             <TextField
-            variant="outlined"
-            fullWidth
-            value = {itemName}
-            onChange={(e) => {
-              setItemName (e.target.value) 
-            }}
-            /> 
-            <Button 
-              variant = "outlined"
-              onClick = {() => {
-              addItem(itemName)
-              setItemName('')
-              handleClose()
-            }}
-            > Add </Button>
+              variant="outlined"
+              fullWidth
+              value={itemName}
+              onChange={(e) => {
+                setItemName(e.target.value);
+              }}
+            />
+            <Button
+              variant="outlined"
+              onClick={() => {
+                addItem(itemName);
+                setItemName("");
+                handleClose();
+              }}
+            >
+              Add
+            </Button>
           </Stack>
         </Box>
       </Modal>
+      <Button
+        variant="contained"
+        onClick={() => {
+          handleOpen();
+        }}
+      >
+        Add new item!
+      </Button>
+      <Box border="1px solid #333">
+        <Box
+          width="800px"
+          height="100px"
+          bgcolor="#ADD8E6"
+          alignItems="center"
+          justifyContent="center"
+          display="flex"
+        >
+          <Typography variant="h2" color="#333">
+            Inventory Items!
+          </Typography>
+        </Box>
+      </Box>
+      <Stack
+        width="800px"
+        height="300px"
+        spacing={2}
+        sx={{ overflow: "auto" }}
+      >
+        {inventory.map(({ name, quantity }) => (
+          <Box
+            key={name}
+            width="100%"
+            minHeight="150px"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            bgcolor="#f0f0f0"
+            padding={5}
+          >
+            <Typography variant="h3">{name}</Typography>
+          </Box>
+        ))}
+      </Stack>
     </Box>
   );
 }
