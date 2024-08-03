@@ -9,7 +9,17 @@ import {
   TextField,
   Typography,
   Button,
+  Container,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Card,
+  CardContent,
+  CardActions,
 } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import InventoryIcon from '@mui/icons-material/Inventory';
 import {
   query,
   getDocs,
@@ -76,98 +86,94 @@ export default function Home() {
   const handleClose = () => setOpen(false);
 
   return (
-    <Box
-      width="100vw"
-      height="100vh"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      gap={2}
-    >
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <InventoryIcon sx={{ mr: 2 }} />
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Inventory Management
+          </Typography>
+          <Button color="inherit" onClick={handleOpen}>Add New Item</Button>
+        </Toolbar>
+      </AppBar>
+      
+      <Container maxWidth="md" sx={{ mt: 4 }}>
+        <Typography variant="h4" gutterBottom>
+          Inventory Items
+        </Typography>
+        
+        <Stack spacing={2}>
+          {inventory.map(({ name, quantity }) => (
+            <Card key={name} elevation={3}>
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  {name.charAt(0).toUpperCase() + name.slice(1)}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Quantity: {quantity}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <IconButton 
+                  color="primary" 
+                  onClick={() => addItem(name)}
+                  aria-label="add"
+                >
+                  <AddIcon />
+                </IconButton>
+                <IconButton 
+                  color="secondary" 
+                  onClick={() => removeItem(name)}
+                  aria-label="remove"
+                >
+                  <RemoveIcon />
+                </IconButton>
+              </CardActions>
+            </Card>
+          ))}
+        </Stack>
+      </Container>
+
       <Modal open={open} onClose={handleClose}>
         <Box
-          position="absolute"
-          top="50%"
-          left="50%"
-          width={400}
-          bgcolor="white"
-          border="2px solid #000"
-          boxShadow={24}
-          p={4}
-          display="flex"
-          flexDirection="column"
-          gap={3}
           sx={{
-            transform: "translate(-50%,-50%)",
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
           }}
         >
-          <Typography variant="h6">Add Item</Typography>
-          <Stack width="100%" direction="row" spacing={2}>
-            <TextField
-              variant="outlined"
-              fullWidth
-              value={itemName}
-              onChange={(e) => {
-                setItemName(e.target.value);
-              }}
-            />
-            <Button
-              variant="outlined"
-              onClick={() => {
-                addItem(itemName);
-                setItemName("");
-                handleClose();
-              }}
-            >
-              Add
-            </Button>
-          </Stack>
+          <Typography variant="h6" component="h2" gutterBottom>
+            Add New Item
+          </Typography>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Item Name"
+            fullWidth
+            variant="outlined"
+            value={itemName}
+            onChange={(e) => setItemName(e.target.value)}
+          />
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={() => {
+              addItem(itemName);
+              setItemName("");
+              handleClose();
+            }}
+            sx={{ mt: 2 }}
+          >
+            Add Item
+          </Button>
         </Box>
       </Modal>
-      <Button
-        variant="contained"
-        onClick={() => {
-          handleOpen();
-        }}
-      >
-        Add new item!
-      </Button>
-      <Box border="1px solid #333">
-        <Box
-          width="800px"
-          height="100px"
-          bgcolor="#ADD8E6"
-          alignItems="center"
-          justifyContent="center"
-          display="flex"
-        >
-          <Typography variant="h2" color="#333">
-            Inventory Items!
-          </Typography>
-        </Box>
-      </Box>
-      <Stack
-        width="800px"
-        height="300px"
-        spacing={2}
-        sx={{ overflow: "auto" }}
-      >
-        {inventory.map(({ name, quantity }) => (
-          <Box
-            key={name}
-            width="100%"
-            minHeight="150px"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            bgcolor="#f0f0f0"
-            padding={5}
-          >
-            <Typography variant="h3">{name}</Typography>
-          </Box>
-        ))}
-      </Stack>
     </Box>
   );
 }
